@@ -60,7 +60,6 @@ tmp/
 .vscode
 .project
 .classpath
-/gradle
 
 # codecov.io
 coverage/
