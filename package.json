@@ -1,0 +1,41 @@
+{
+  "name": "java-fastjson-protobuf",
+  "version": "1.0.0",
+  "description": "java-fastjson-protobuf",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "nyc ava --timeout=10s",
+    "test-no-report": "NODE_DEBUG=java-fastjson-protobuf nyc ava --timeout=10s --verbose",
+    "lint": "eslint .",
+    "posttest": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+  },
+  "files": [
+    "src/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kaelzhang/java-fastjson-protobuf.git"
+  },
+  "keywords": [
+    "java-fastjson-protobuf"
+  ],
+  "engines": {
+    "node": ">= 6"
+  },
+  "ava": {
+    "babel": false
+  },
+  "author": "kaelzhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kaelzhang/java-fastjson-protobuf/issues"
+  },
+  "devDependencies": {
+    "ava": ">= 1.0.0-beta.6",
+    "codecov": "^3.0.2",
+    "nyc": "^12.0.2",
+    "eslint-config-ostai": "^1.1.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint": "^5.1.0"
+  }
+}
