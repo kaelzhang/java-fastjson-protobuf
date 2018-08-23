@@ -13,20 +13,40 @@
 [![Dependency Status](https://david-dm.org/kaelzhang/java-fastjson-protobuf.svg)](https://david-dm.org/kaelzhang/java-fastjson-protobuf)
 -->
 
-# java-fastjson-protobuf
+# fastjson-protobuf
 
-<!-- description -->
-
-## Install
-
-```sh
-$ npm i java-fastjson-protobuf
-```
+Alibaba fastjson with serializer/deserializer of Protobuf Messages.
 
 ## Usage
 
-```js
-import java_fastjson_protobuf from 'java-fastjson-protobuf'
+
+
+## Install
+
+### Gradle
+
+```gradle
+compile "ai.ost:fastjson-protobuf:$VERSION"
+
+compile "ai.ost:fastjson-protobuf-android:1.0.0"
+```
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>ai.ost</groupId>
+  <artifactId>fastjson-protobuf</artifactId>
+  <version>VERSION</version>
+</dependency>
+```
+
+```xml
+<dependency>
+  <groupId>ai.ost</groupId>
+  <artifactId>fastjson-protobuf-android</artifactId>
+  <version>VERSION</version>
+</dependency>
 ```
 
 ## License
