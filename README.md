@@ -28,7 +28,7 @@ Alibaba fastjson with serializer/deserializer of Protobuf Messages.
 ```gradle
 compile "ai.ost:fastjson-protobuf:$VERSION"
 
-compile "ai.ost:fastjson-protobuf-android:1.0.0"
+compile "ai.ost:fastjson-protobuf-android:$VERSION"
 ```
 
 ### Maven
