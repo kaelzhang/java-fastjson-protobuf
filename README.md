@@ -15,14 +15,67 @@
 
 # fastjson-protobuf
 
-WORKING IN PROGRESS
+Spring `HttpMessageConverter` implementation with Alibaba FastJson and serializer/deserializer of Protobuf Messages.
 
-Alibaba fastjson with serializer/deserializer of Protobuf Messages.
+With `fastjson-protobuf`, we can use protocol buffers to define both request and response entities.
 
 ## Usage
 
 ```java
-// TODO
+@EnableWebMvc
+@Configuration
+public class WebMvcConfig implements WebMvcConfigurer {
+  @Override
+  public void configureMessageConverters(
+    List<HttpMessageConverter<?>> converters
+  ) {
+    
+    FastJsonProtobufHttpMessageConverter converter = 
+      new FastJsonProtobufHttpMessageConverter();
+    
+    converter.setSupportedMediaTypes(
+      Arrays.asList(
+        MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_JSON_UTF8
+      )
+    );
+
+    converters.add(converter);
+  }
+}
+```
+
+```protobuf
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string msg = 1;
+}
+```
+
+```java
+@RestController
+public class APIController {
+  @RequestMapping(
+    value = "/hello",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @RequestBody
+  public HelloResponse hello(@RequestBody HelloRequest req) {
+    // We can use `HelloResponse` as the return value
+    return HelloResponse.newBuilder()
+      .setMsg("Hello " + req.getName())
+      .build();
+  }
+}
+```
+
+```sh
+$ curl -X POST -d '{"name": "World"}' http://localhost:8080/hello
+{"msg": "Hello World"}
 ```
 
 ## Install
@@ -31,8 +84,6 @@ Alibaba fastjson with serializer/deserializer of Protobuf Messages.
 
 ```gradle
 compile "ai.ost:fastjson-protobuf:$VERSION"
-
-compile "ai.ost:fastjson-protobuf-android:$VERSION"
 ```
 
 ### Maven
@@ -41,14 +92,6 @@ compile "ai.ost:fastjson-protobuf-android:$VERSION"
 <dependency>
   <groupId>ai.ost</groupId>
   <artifactId>fastjson-protobuf</artifactId>
-  <version>VERSION</version>
-</dependency>
-```
-
-```xml
-<dependency>
-  <groupId>ai.ost</groupId>
-  <artifactId>fastjson-protobuf-android</artifactId>
   <version>VERSION</version>
 </dependency>
 ```

@@ -11,15 +11,10 @@ def GRPC_VERSION = '1.14.0'
 buildscript {
   repositories {
     mavenCentral()
-    // maven {
-    //   url "https://plugins.gradle.org/m2/"
-    // }
   }
   dependencies {
     // classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
     classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.5"
-    // Ref: https://plugins.gradle.org/plugin/com.palantir.docker
-    // classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.20.1"
   }
 }
 
@@ -60,20 +55,22 @@ dependencies {
   // compile "io.grpc:grpc-alts:${GRPC_VERSION}"
 
   compile "com.google.protobuf:protobuf-java-util:${PROTOBUF_VERSION}"
+  compile "org.apache.directory.studio:org.apache.commons.io:2.4"
+  compile 'org.springframework:spring-webmvc:5.0.8.RELEASE'
+  compile "com.alibaba:fastjson:1.2.49"
 
 //  compile "org.springframework.boot:spring-boot-starter-web"
-   compile "org.apache.directory.studio:org.apache.commons.io:2.4"
+
 
   // actuator
   // compile "org.springframework.boot:spring-boot-starter-actuator"
 
-  compile 'org.springframework:spring-webmvc:5.0.8.RELEASE'
-  compile "com.alibaba:fastjson:1.2.49"
+
 
   // protobuf fileTree("node_modules/@ostai/member-service/app/proto")
 
   // The built protobuf messages and services
-  compile files("build/classes/java/main")
+//  compile files("build/classes/java/main")
 
   // tests
   testCompile "io.grpc:grpc-protobuf:${GRPC_VERSION}"
@@ -82,12 +79,6 @@ dependencies {
 }
 
 sourceSets {
-  // main {
-  //   proto {
-  //     // In addition to the default 'src/main/proto'
-  //     srcDir "node_modules/@ostai/member-service/app/proto"
-  //   }
-  // }
   test {
     proto {
       srcDir "src/test/proto"
@@ -109,16 +100,4 @@ sourceSets {
 // applicationDistribution.into('bin') {
 //   from(apiServer)
 //   fileMode = 0755
-// }
-
-
-
-// apply plugin: 'com.palantir.docker'
-
-// docker {
-//   dependsOn build
-//   name "${project.group}/${bootJar.baseName}"
-//   tags bootJar.version, "latest"
-//   files bootJar.archivePath
-//   buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 // }
