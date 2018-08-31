@@ -21,6 +21,8 @@ With `fastjson-protobuf`, we can use protocol buffers to define both request and
 
 ## Usage
 
+First, define our own `HttpMessageConverter`
+
 ```java
 @EnableWebMvc
 @Configuration
@@ -45,6 +47,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
+Then define Protocol Buffer messages:
+
 ```protobuf
 message HelloRequest {
   string name = 1;
@@ -54,6 +58,8 @@ message HelloResponse {
   string msg = 1;
 }
 ```
+
+In order to use protobuf messages as entities, we can use gradle plugin `com.google.protobuf` together with [protoc](https://search.maven.org/artifact/com.google.protobuf/protoc) and protoc plugin [protoc-gen-grpc-java](https://search.maven.org/artifact/io.grpc/protoc-gen-grpc-java/).
 
 ```java
 @RestController
@@ -83,7 +89,7 @@ $ curl -X POST -d '{"name": "World"}' http://localhost:8080/hello
 ### Gradle
 
 ```gradle
-compile "ai.ost:fastjson-protobuf:$VERSION"
+compile "ai.ost:fastjson-protobuf:${VERSION}"
 ```
 
 ### Maven
@@ -92,7 +98,7 @@ compile "ai.ost:fastjson-protobuf:$VERSION"
 <dependency>
   <groupId>ai.ost</groupId>
   <artifactId>fastjson-protobuf</artifactId>
-  <version>VERSION</version>
+  <version>${VERSION}</version>
 </dependency>
 ```
 
