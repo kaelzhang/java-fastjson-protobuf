@@ -1,4 +1,4 @@
-package ai.ost.demo;
+package ai.ost.fastjson_protobuf;
 
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
@@ -9,8 +9,8 @@ import com.google.protobuf.util.JsonFormat;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-class ProtoMessageCodec implements ObjectSerializer {
-  public final static ProtoMessageCodec instance = new ProtoMessageCodec();
+class GeneratedMessageV3Codec implements ObjectSerializer {
+  public final static GeneratedMessageV3Codec instance = new GeneratedMessageV3Codec();
 
   private static JsonFormat.Printer printer = JsonFormat
     .printer()

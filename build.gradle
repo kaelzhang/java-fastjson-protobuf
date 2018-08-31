@@ -41,10 +41,10 @@ protobuf {
 
 group = 'ai.ost'
 
-bootJar {
-  baseName = 'fastjson-protobuf'
-  version =  '1.0.0'
-}
+//bootJar {
+//  baseName = 'fastjson-protobuf'
+//  version =  '1.0.0'
+//}
 
 repositories {
   mavenCentral()
@@ -61,12 +61,13 @@ dependencies {
 
   compile "com.google.protobuf:protobuf-java-util:${PROTOBUF_VERSION}"
 
-  compile "org.springframework.boot:spring-boot-starter-web"
-  // compile "org.apache.directory.studio:org.apache.commons.io:2.4"
+//  compile "org.springframework.boot:spring-boot-starter-web"
+   compile "org.apache.directory.studio:org.apache.commons.io:2.4"
 
   // actuator
   // compile "org.springframework.boot:spring-boot-starter-actuator"
 
+  compile 'org.springframework:spring-webmvc:5.0.8.RELEASE'
   compile "com.alibaba:fastjson:1.2.49"
 
   // protobuf fileTree("node_modules/@ostai/member-service/app/proto")

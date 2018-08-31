@@ -1,18 +1,19 @@
-package ai.ost.demo;
+package ai.ost.fastjson_protobuf;
 
 import com.alibaba.fastjson.serializer.ObjectSerializer;
-import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.google.protobuf.GeneratedMessageV3;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenericSerializeConfig extends SerializeConfig {
+public class SerializeConfig extends com.alibaba.fastjson.serializer.SerializeConfig {
   private final HashMap<Class<?>, ObjectSerializer> genericSerializer;
 
-  GenericSerializeConfig () {
+  SerializeConfig () {
     super();
     genericSerializer = new HashMap<>();
+    genericPut(GeneratedMessageV3.class, GeneratedMessageV3Codec.instance);
   }
 
   @Override
@@ -30,8 +31,11 @@ public class GenericSerializeConfig extends SerializeConfig {
     return super.getObjectWriter(clazz);
   }
 
-  boolean genericPut (Type type, ObjectSerializer serializer) {
+  void disableProtobuf () {
+    genericSerializer.clear();
+  }
+
+  void genericPut (Type type, ObjectSerializer serializer) {
     genericSerializer.put((Class<?>) type, serializer);
-    return true;
   }
 }

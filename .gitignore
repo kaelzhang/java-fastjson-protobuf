@@ -1,3 +1,8 @@
+# Idea
+*.iml
+*.ipr
+*.iws
+
 # babel dist
 /lib
 

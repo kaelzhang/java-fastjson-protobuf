@@ -1,31 +1,22 @@
-package ai.ost.demo;
+package ai.ost.fastjson_protobuf;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpInputMessage;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
-import java.util.*;
 
-class ProtoMessageJsonConverter implements HttpMessageConverter<Message> {
-  private List<MediaType> supportedMediaTypes = Arrays.asList(
-    MediaType.APPLICATION_JSON,
-    MediaType.APPLICATION_JSON_UTF8
-  );
-
+class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter {
   private JsonFormat.Printer printer = JsonFormat
     .printer()
     .omittingInsignificantWhitespace()
@@ -33,60 +24,65 @@ class ProtoMessageJsonConverter implements HttpMessageConverter<Message> {
 
   private JsonFormat.Parser parser = JsonFormat.parser().ignoringUnknownFields();
 
-  private boolean isNotProtobufMessage (Class<?> clazz) {
+  private Boolean protobufReadEnabled = true;
+
+  public FastJsonProtobufHttpMessageConverter () {
+    super();
+
+    this.getFastJsonConfig().setSerializeConfig(new SerializeConfig());
+  }
+
+  public void disableProtobuf () {
+    disableProtobufWriter(this.getFastJsonConfig().getSerializeConfig());
+    protobufReadEnabled = false;
+  }
+
+  private void disableProtobufWriter (com.alibaba.fastjson.serializer.SerializeConfig serializeConfig) {
+    // do nothing
+  }
+
+  protected void disableProtobufWriter (SerializeConfig serializeConfig) {
+    serializeConfig.disableProtobuf();
+  }
+
+  private boolean isNotGeneratedMessageV3 (Class<?> clazz) {
     return !GeneratedMessageV3.class.isAssignableFrom(clazz);
   }
 
   @Override
   public boolean canRead(Class<?> clazz, @Nullable MediaType mediaType) {
-    if (isNotProtobufMessage(clazz)) {
-      return false;
+    if (isNotGeneratedMessageV3(clazz)) {
+      return super.canRead(clazz, mediaType);
     }
 
-    if (mediaType == null) {
-      return true;
-    }
-    for (MediaType supportedMediaType : supportedMediaTypes) {
-      if (supportedMediaType.includes(mediaType)) {
-        return true;
-      }
-    }
-    return false;
+    return canRead(mediaType);
   }
 
   @Override
   public boolean canWrite(Class<?> clazz, @Nullable MediaType mediaType) {
-    if (isNotProtobufMessage(clazz)) {
-      return false;
+    if (isNotGeneratedMessageV3(clazz)) {
+      return super.canWrite(clazz, mediaType);
     }
 
-    if (mediaType == null || MediaType.ALL.equals(mediaType)) {
-      return true;
-    }
-    for (MediaType supportedMediaType : getSupportedMediaTypes()) {
-      if (supportedMediaType.isCompatibleWith(mediaType)) {
-        return true;
-      }
-    }
-    return false;
+    return canWrite(mediaType);
   }
 
+  // JSON -> Given Entity
   @Override
-  public List<MediaType> getSupportedMediaTypes() {
-    return supportedMediaTypes;
-  }
-
-  @Override
-  public Message read(
-    Class<? extends Message> clazz,
+  protected Object readInternal(
+    Class<?> clazz,
     HttpInputMessage inputMessage
-  ) throws HttpMessageNotReadableException {
+  ) throws IOException, HttpMessageNotReadableException {
+    if (!protobufReadEnabled || isNotGeneratedMessageV3(clazz)) {
+      return super.readInternal(clazz, inputMessage);
+    }
+
     InputStream is;
 
     try {
       is = inputMessage.getBody();
     } catch (IOException e) {
-      throw new HttpMessageNotReadableException("can not get message body");
+      throw new IOException("can not get message body");
     }
 
     StringWriter writer = new StringWriter();
@@ -94,7 +90,7 @@ class ProtoMessageJsonConverter implements HttpMessageConverter<Message> {
     try {
       IOUtils.copy(is, writer, "utf8");
     } catch (IOException e) {
-      throw new HttpMessageNotReadableException("can not read input stream");
+      throw new IOException("can not read input stream");
     }
 
     Message.Builder builder;
@@ -118,26 +114,5 @@ class ProtoMessageJsonConverter implements HttpMessageConverter<Message> {
     }
 
     return builder.build();
-  }
-
-  @Override
-  public void write(
-    Message o,
-    @Nullable MediaType contentType,
-    HttpOutputMessage outputMessage
-  ) throws HttpMessageNotWritableException {
-    String json;
-
-    try {
-      json = printer.print(o);
-    } catch (InvalidProtocolBufferException e) {
-      throw new HttpMessageNotWritableException("invalid protobuf");
-    }
-
-    try {
-      outputMessage.getBody().write(json.getBytes(Charset.forName("UTF-8")));
-    } catch (IOException e) {
-      throw new HttpMessageNotWritableException("can not write to output");
-    }
   }
 }
