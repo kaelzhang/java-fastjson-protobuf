@@ -43,6 +43,19 @@ public class FastJsonProtobufHttpMessageControllerTest {
   }
 
   @Test
+  public void normalJson() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/normal-json")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"world\"}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+  }
+
+  @Test
   public void simpleProto() throws Exception {
     mvc.perform(MockMvcRequestBuilders.get("/simple-proto").accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())

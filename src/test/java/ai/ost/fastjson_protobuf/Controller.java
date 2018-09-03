@@ -34,4 +34,40 @@ public class Controller {
       .setMessage("hello " + req.getName())
       .build();
   }
+
+  @RequestMapping(
+    value = "/normal-json",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  public NormalRes normalJson (@RequestBody NormalReq req) {
+    NormalRes res = new NormalRes();
+    res.setMessage("hello " + req.getName());
+    return res;
+  }
+}
+
+class NormalReq {
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+}
+
+class NormalRes {
+  private String message;
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }
