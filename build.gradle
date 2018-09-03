@@ -1,8 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'com.google.protobuf'
-// apply plugin: 'org.springframework.boot'
-// apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 def PROTOC_VERSION = '3.5.1-1'
 def PROTOBUF_VERSION = '3.5.1'
@@ -13,7 +13,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    // classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
     classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.5"
   }
 }
@@ -36,10 +36,10 @@ protobuf {
 
 group = 'ai.ost'
 
-//bootJar {
-//  baseName = 'fastjson-protobuf'
-//  version =  '1.0.0'
-//}
+bootJar {
+  baseName = 'fastjson-protobuf'
+  version =  '0.0.1'
+}
 
 repositories {
   mavenCentral()
@@ -49,30 +49,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-  // compile "io.grpc:grpc-netty-shaded:${GRPC_VERSION}"
-
-  // compile "io.grpc:grpc-stub:${GRPC_VERSION}"
-  // compile "io.grpc:grpc-alts:${GRPC_VERSION}"
-
   compile "com.google.protobuf:protobuf-java-util:${PROTOBUF_VERSION}"
   compile "org.apache.directory.studio:org.apache.commons.io:2.4"
   compile 'org.springframework:spring-webmvc:5.0.8.RELEASE'
   compile "com.alibaba:fastjson:1.2.49"
 
-//  compile "org.springframework.boot:spring-boot-starter-web"
-
-
-  // actuator
-  // compile "org.springframework.boot:spring-boot-starter-actuator"
-
-
-
-  // protobuf fileTree("node_modules/@ostai/member-service/app/proto")
-
-  // The built protobuf messages and services
-//  compile files("build/classes/java/main")
-
   // tests
+  testCompile "org.springframework.boot:spring-boot-starter-web"
   testCompile "io.grpc:grpc-protobuf:${GRPC_VERSION}"
   testCompile "org.springframework.boot:spring-boot-starter-test"
   testCompile "io.grpc:grpc-testing:${GRPC_VERSION}"
@@ -86,18 +69,3 @@ sourceSets {
   }
 }
 
-// apply plugin: 'application'
-
-// startScripts.enabled = false
-
-// task apiServer(type: CreateStartScripts) {
-//   mainClassName = 'ai.ost.demo.Application'
-//   applicationName = 'java-api-server'
-//   outputDir = new File(project.buildDir, 'tmp')
-//   classpath = jar.outputs.files + project.configurations.runtime
-// }
-
-// applicationDistribution.into('bin') {
-//   from(apiServer)
-//   fileMode = 0755
-// }

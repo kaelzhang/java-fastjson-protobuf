@@ -2,6 +2,7 @@
 *.iml
 *.ipr
 *.iws
+/out
 
 # babel dist
 /lib

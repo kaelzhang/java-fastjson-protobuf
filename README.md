@@ -19,6 +19,24 @@ Spring `HttpMessageConverter` implementation with Alibaba FastJson and serialize
 
 With `fastjson-protobuf`, we can use protocol buffers to define both request and response entities.
 
+## Install
+
+### Gradle
+
+```gradle
+compile "ai.ost:fastjson-protobuf:${VERSION}"
+```
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>ai.ost</groupId>
+  <artifactId>fastjson-protobuf</artifactId>
+  <version>${VERSION}</version>
+</dependency>
+```
+
 ## Usage
 
 First, define our own `HttpMessageConverter`
@@ -82,24 +100,6 @@ public class APIController {
 ```sh
 $ curl -X POST -d '{"name": "World"}' http://localhost:8080/hello
 {"msg": "Hello World"}
-```
-
-## Install
-
-### Gradle
-
-```gradle
-compile "ai.ost:fastjson-protobuf:${VERSION}"
-```
-
-### Maven
-
-```xml
-<dependency>
-  <groupId>ai.ost</groupId>
-  <artifactId>fastjson-protobuf</artifactId>
-  <version>${VERSION}</version>
-</dependency>
 ```
 
 ## License
