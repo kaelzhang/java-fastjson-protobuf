@@ -36,11 +36,6 @@ protobuf {
 
 group = 'ai.ost'
 
-bootJar {
-  baseName = 'fastjson-protobuf'
-  version =  '0.0.1'
-}
-
 repositories {
   mavenCentral()
 }
@@ -59,6 +54,8 @@ dependencies {
   testCompile "io.grpc:grpc-protobuf:${GRPC_VERSION}"
   testCompile "org.springframework.boot:spring-boot-starter-test"
   testCompile "io.grpc:grpc-testing:${GRPC_VERSION}"
+
+  testCompile files("build/classes/java/test/ai/ost/test_vo")
 }
 
 sourceSets {

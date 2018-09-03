@@ -22,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration("src/test/java/ai/ost/fastjson_protobuf")
-@ContextConfiguration(classes = WebMvcConfig.class)
+@ContextConfiguration(classes = TestApplication.class)
 public class FastJsonProtobufHttpMessageControllerTest {
 
   @Autowired
@@ -39,6 +39,26 @@ public class FastJsonProtobufHttpMessageControllerTest {
   public void simple() throws Exception {
     mvc.perform(MockMvcRequestBuilders.get("/simple").accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
-      .andExpect(content().string(equalTo("simple")));
+      .andExpect(content().string(equalTo("\"simple\"")));
   }
+
+  @Test
+  public void simpleProto() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.get("/simple-proto").accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"code\":200}")));
+  }
+
+//  @Test
+//  public void requestBody() throws Exception {
+//    mvc.perform(
+//      MockMvcRequestBuilders
+//        .post("/request-body")
+//        .contentType(MediaType.APPLICATION_JSON_VALUE)
+//        .accept(MediaType.APPLICATION_JSON)
+//        .content("{\"name\":\"world\"}".getBytes())
+//    )
+//      .andExpect(status().isOk())
+//      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+//  }
 }

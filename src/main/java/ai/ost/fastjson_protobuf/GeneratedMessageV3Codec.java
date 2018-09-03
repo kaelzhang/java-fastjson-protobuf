@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 class GeneratedMessageV3Codec implements ObjectSerializer {
-  public final static GeneratedMessageV3Codec instance = new GeneratedMessageV3Codec();
+  final static GeneratedMessageV3Codec instance = new GeneratedMessageV3Codec();
 
   private static JsonFormat.Printer printer = JsonFormat
     .printer()

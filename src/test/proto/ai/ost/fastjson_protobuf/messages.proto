@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ai.ost.test_vo.Entity";
+option java_outer_classname = "EntityProto";
+
+message SimpleProtoRes {
+    int32 code = 1;
+}
+
+message RequestBodyReq {
+    string name = 1;
+}
+
+message RequestBodyRes {
+    string message = 1;
+}
