@@ -30,6 +30,7 @@ public class Controller {
   )
   @ResponseBody
   public RequestBodyRes requestBody (@RequestBody RequestBodyReq req) {
+    System.out.print(">>>>>>>>>>>>>>>:" + req.getName());
     return RequestBodyRes.newBuilder()
       .setMessage("hello " + req.getName())
       .build();

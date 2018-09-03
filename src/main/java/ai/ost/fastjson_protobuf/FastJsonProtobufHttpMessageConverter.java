@@ -5,6 +5,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 
 class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter {
   private JsonFormat.Printer printer = JsonFormat
@@ -50,21 +52,18 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
   }
 
   @Override
-  public boolean canRead(Class<?> clazz, @Nullable MediaType mediaType) {
+  public Object read(
+    Type type,
+    Class<?> contextClass,
+    HttpInputMessage inputMessage
+  ) throws IOException, HttpMessageNotReadableException {
+    Class<?> clazz = (Class<?>) type;
+
     if (isNotGeneratedMessageV3(clazz)) {
-      return super.canRead(clazz, mediaType);
+      return super.read(type, contextClass, inputMessage);
     }
 
-    return canRead(mediaType);
-  }
-
-  @Override
-  public boolean canWrite(Class<?> clazz, @Nullable MediaType mediaType) {
-    if (isNotGeneratedMessageV3(clazz)) {
-      return super.canWrite(clazz, mediaType);
-    }
-
-    return canWrite(mediaType);
+    return readInternal(clazz, inputMessage);
   }
 
   // JSON -> Given Entity

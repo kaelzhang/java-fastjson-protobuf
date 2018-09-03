@@ -62,16 +62,16 @@ public class FastJsonProtobufHttpMessageControllerTest {
       .andExpect(content().string(equalTo("{\"code\":200}")));
   }
 
-//  @Test
-//  public void requestBody() throws Exception {
-//    mvc.perform(
-//      MockMvcRequestBuilders
-//        .post("/request-body")
-//        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//        .accept(MediaType.APPLICATION_JSON)
-//        .content("{\"name\":\"world\"}".getBytes())
-//    )
-//      .andExpect(status().isOk())
-//      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
-//  }
+  @Test
+  public void requestBody() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/request-body")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"world\"}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+  }
 }
