@@ -1,21 +1,20 @@
 package ai.ost.fastjson_protobuf;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpInputMessage;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+
 
 class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter {
   private JsonFormat.Printer printer = JsonFormat
@@ -30,25 +29,23 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
   public FastJsonProtobufHttpMessageConverter () {
     super();
 
-    this.getFastJsonConfig().setSerializeConfig(new SerializeConfig());
+    FastJsonConfig config = this.getFastJsonConfig();
+    config.setSerializeConfig(new SerializeConfig());
+    config.setParserConfig(new ParserConfig());
   }
 
-  public void disableProtobuf () {
-    disableProtobufWriter(this.getFastJsonConfig().getSerializeConfig());
-    protobufReadEnabled = false;
-  }
+//  public void disableProtobuf () {
+//    disableProtobufWriter(this.getFastJsonConfig().getSerializeConfig());
+//    protobufReadEnabled = false;
+//  }
 
-  private void disableProtobufWriter (com.alibaba.fastjson.serializer.SerializeConfig serializeConfig) {
-    // do nothing
-  }
-
-  protected void disableProtobufWriter (SerializeConfig serializeConfig) {
-    serializeConfig.disableProtobuf();
-  }
-
-  private boolean isNotGeneratedMessageV3 (Class<?> clazz) {
-    return !GeneratedMessageV3.class.isAssignableFrom(clazz);
-  }
+//  private void disableProtobufWriter (com.alibaba.fastjson.serializer.SerializeConfig serializeConfig) {
+//    // do nothing
+//  }
+//
+//  protected void disableProtobufWriter (SerializeConfig serializeConfig) {
+//    serializeConfig.disableProtobuf();
+//  }
 
   @Override
   public Object read(
@@ -56,61 +53,39 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
     Class<?> contextClass,
     HttpInputMessage inputMessage
   ) throws IOException, HttpMessageNotReadableException {
-    Class<?> clazz = (Class<?>) type;
-
-    if (isNotGeneratedMessageV3(clazz)) {
-      return super.read(type, contextClass, inputMessage);
-    }
-
-    return readInternal(clazz, inputMessage);
+    return readType(getType(type, contextClass), inputMessage);
   }
 
-  // JSON -> Given Entity
-//  @Override
-//  protected Object readInternal(
-//    Class<?> clazz,
-//    HttpInputMessage inputMessage
-//  ) throws IOException, HttpMessageNotReadableException {
-//    if (!protobufReadEnabled || isNotGeneratedMessageV3(clazz)) {
-//      return super.readInternal(clazz, inputMessage);
-//    }
-//
-//    InputStream is;
-//
-//    try {
-//      is = inputMessage.getBody();
-//    } catch (IOException e) {
-//      throw new IOException("can not get message body");
-//    }
-//
-//    StringWriter writer = new StringWriter();
-//
-//    try {
-//      IOUtils.copy(is, writer, "utf8");
-//    } catch (IOException e) {
-//      throw new IOException("can not read input stream");
-//    }
-//
-//    Message.Builder builder;
-//
-//    try {
-//      builder = (GeneratedMessageV3.Builder) clazz.getMethod("newBuilder").invoke(clazz);
-//    } catch (NoSuchMethodException e) {
-//      throw new HttpMessageNotReadableException("invalid instance");
-//    } catch (IllegalArgumentException e) {
-//      throw new HttpMessageNotReadableException("invalid arguments");
-//    } catch (InvocationTargetException e) {
-//      throw new HttpMessageNotReadableException("invalid target");
-//    } catch (IllegalAccessException e) {
-//      throw new HttpMessageNotReadableException("invalid access");
-//    }
-//
-//    try {
-//      parser.merge(writer.toString(), builder);
-//    } catch (InvalidProtocolBufferException e) {
-//      throw new HttpMessageNotReadableException("can not convert to protobuf");
-//    }
-//
-//    return builder.build();
-//  }
+  @Override
+  protected Object readInternal(
+    Class<?> clazz,
+    HttpInputMessage inputMessage
+  ) throws IOException, HttpMessageNotReadableException {
+    return readType(getType(clazz, null), inputMessage);
+  }
+
+  private Object readType(Type type, HttpInputMessage inputMessage) throws IOException {
+    InputStream is;
+
+    try {
+      is = inputMessage.getBody();
+    } catch (IOException e) {
+      throw new HttpMessageNotReadableException("I/O error while getting input body", e);
+    }
+
+    FastJsonConfig config = this.getFastJsonConfig();
+    StringWriter writer = new StringWriter();
+
+    try {
+      IOUtils.copy(is, writer, config.getCharset());
+    } catch (IOException e) {
+      throw new HttpMessageNotReadableException("I/O error while reading input message", e);
+    }
+
+    try {
+      return JSON.parseObject(writer.toString(), type, config.getParserConfig(), config.getFeatures());
+    } catch (JSONException e) {
+      throw new HttpMessageNotReadableException("JSON parse error: " + e.getMessage(), e);
+    }
+  }
 }

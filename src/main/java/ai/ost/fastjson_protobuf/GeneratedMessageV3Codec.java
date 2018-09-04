@@ -84,9 +84,6 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
 
     int endToken;
 
-    int endPos = 0;
-    int currentPos = 0;
-
     if (startToken == JSONToken.LBRACE) {
       endToken = JSONToken.RBRACE;
     } else if (startToken == JSONToken.LBRACKET) {
@@ -100,12 +97,13 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
     // The JSONLexer of fastjson is buggy about the pos.
     // For now, we must get the pos after `nextToken()`
     int startPos = lexer.pos() - 1;
+    int endPos = 0;
+
     int current;
     int expectR = 1;
 
     while (true) {
       current = lexer.token();
-      currentPos = lexer.pos();
 
       if (current == endToken && -- expectR == 0) {
         endPos = lexer.pos();

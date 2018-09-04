@@ -36,56 +36,48 @@ public class FastJsonProtobufHttpMessageControllerTest {
     mvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
   }
 
-//  @Test
-//  public void simple() throws Exception {
-//    mvc.perform(MockMvcRequestBuilders.get("/simple").accept(MediaType.APPLICATION_JSON))
-//      .andExpect(status().isOk())
-//      .andExpect(content().string(equalTo("\"simple\"")));
-//  }
-//
-//  @Test
-//  public void normalJson() throws Exception {
-//    mvc.perform(
-//      MockMvcRequestBuilders
-//        .post("/normal-json")
-//        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//        .accept(MediaType.APPLICATION_JSON)
-//        .content("{\"name\":\"world\"}".getBytes())
-//    )
-//      .andExpect(status().isOk())
-//      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
-//  }
-//
-//  @Test
-//  public void simpleProto() throws Exception {
-//    mvc.perform(MockMvcRequestBuilders.get("/simple-proto").accept(MediaType.APPLICATION_JSON))
-//      .andExpect(status().isOk())
-//      .andExpect(content().string(equalTo("{\"code\":200}")));
-//  }
-//
-//  @Test
-//  public void requestBody() throws Exception {
-//    mvc.perform(
-//      MockMvcRequestBuilders
-//        .post("/request-body")
-//        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//        .accept(MediaType.APPLICATION_JSON)
-//        .content("{\"name\":\"world\"}".getBytes())
-//    )
-//      .andExpect(status().isOk())
-//      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
-//  }
+  @Test
+  public void simple() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.get("/simple").accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("\"simple\"")));
+  }
 
   @Test
-  public void mixed() throws Exception {
-    String str = "{\"a\":{\"name\":\"haha\"}}";
+  public void normalJson() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/normal-json")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"world\"}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+  }
 
-    ParserConfig config = new ParserConfig();
+  @Test
+  public void simpleProto() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.get("/simple-proto").accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"code\":200}")));
+  }
 
-    O parsed = JSON.parseObject(str, O.class, config, JSON.DEFAULT_PARSER_FEATURE);
+  @Test
+  public void requestBody() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/request-body")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"world\"}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+  }
 
-    System.out.println(">>>>>>>>>>>>>>>>>>" + parsed.getA().getName());
-
+  @Test
+  public void mixedRes() throws Exception {
     mvc.perform(
       MockMvcRequestBuilders
         .post("/mixed-res")
@@ -96,18 +88,43 @@ public class FastJsonProtobufHttpMessageControllerTest {
       .andExpect(status().isOk())
       .andExpect(content().string(equalTo("{\"res\":{\"message\":\"world\"}}")));
   }
-}
 
-
-class O {
-  private RequestBodyReq a;
-
-  public void setA(RequestBodyReq a) {
-    this.a = a;
+  @Test
+  public void mixedReq() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/mixed-req")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"req\":{\"name\":\"world\"}}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
   }
 
-  public RequestBodyReq getA() {
-    return a;
+  @Test
+  public void mixed() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/mixed")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"req\":{\"name\":\"world\"}}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"res\":{\"message\":\"hello world\"}}")));
+  }
+
+  @Test
+  public void deep() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/deep")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"req\":{\"name\":\"world\"}}".getBytes())
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(equalTo("{\"res\":{\"message\":\"hello world\"}}")));
   }
 }
-

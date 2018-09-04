@@ -31,9 +31,9 @@ public class SerializeConfig extends com.alibaba.fastjson.serializer.SerializeCo
     return super.getObjectWriter(clazz);
   }
 
-  void disableProtobuf () {
-    genericSerializer.clear();
-  }
+//  void disableProtobuf () {
+//    genericSerializer.clear();
+//  }
 
   void genericPut (Type type, ObjectSerializer serializer) {
     genericSerializer.put((Class<?>) type, serializer);

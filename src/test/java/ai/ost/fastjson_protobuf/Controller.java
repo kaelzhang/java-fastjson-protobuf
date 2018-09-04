@@ -1,8 +1,6 @@
 package ai.ost.fastjson_protobuf;
 
-import ai.ost.test_vo.Entity.SimpleProtoRes;
-import ai.ost.test_vo.Entity.RequestBodyRes;
-import ai.ost.test_vo.Entity.RequestBodyReq;
+import ai.ost.test_vo.Entity.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,6 +62,51 @@ public class Controller {
     );
 
     return res;
+  }
+
+  @RequestMapping(
+    value = "/mixed-req",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  public NormalRes mixedReq (@RequestBody MixedReq req) {
+    NormalRes res = new NormalRes();
+    res.setMessage("hello " + req.getReq().getName());
+    return res;
+  }
+
+  @RequestMapping(
+    value = "/mixed",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  public MixedRes mixed (@RequestBody MixedReq req) {
+    MixedRes res = new MixedRes();
+    res.setRes(
+      RequestBodyRes.newBuilder()
+        .setMessage("hello " + req.getReq().getName())
+        .build()
+    );
+    return res;
+  }
+
+  @RequestMapping(
+    value = "/deep",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  public DeepRes deep (@RequestBody DeepReq req) {
+    return DeepRes.newBuilder()
+      .setRes(
+        RequestBodyRes.newBuilder()
+        .setMessage(
+          "hello " + req.getReq().getName()
+        )
+      )
+      .build();
   }
 }
 

@@ -15,3 +15,11 @@ message RequestBodyReq {
 message RequestBodyRes {
     string message = 1;
 }
+
+message DeepReq {
+    RequestBodyReq req = 1;
+}
+
+message DeepRes {
+    RequestBodyRes res = 1;
+}
