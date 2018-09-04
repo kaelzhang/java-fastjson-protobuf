@@ -3,6 +3,7 @@
 *.ipr
 *.iws
 /out
+settings.gradle
 
 # babel dist
 /lib

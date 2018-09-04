@@ -1,6 +1,6 @@
 def GROUP = 'ai.ost'
 def NAME = 'fastjson-protobuf'
-def VERSION = '0.1.0'
+def VERSION = '0.1.1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -91,13 +91,7 @@ jacocoTestReport {
 }
 
 task sourceJar(type: Jar) {
-  classifier "sources"
   from sourceSets.main.allJava
-}
-
-artifacts {
-  archives jar
-  archives sourceJar
 }
 
 signing {
@@ -105,30 +99,28 @@ signing {
 }
 
 publishing {
+  repositories {
+    maven {
+      url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+      credentials {
+        username sonatypeUsername
+        password sonatypePassword
+      }
+    }
+  }
+
   publications {
-    mavenJava(MavenPublication) {
+    maven(MavenPublication) {
       groupId = "${GROUP}"
       artifactId = "${NAME}"
       version = "${VERSION}"
 
       from components.java
 
-      artifact(sourceJar) {
-        classifier = 'sources'
-      }
-
       pom {
         name = 'FastJson Protobuf'
         description = 'Spring `HttpMessageConverter` implementation with Alibaba FastJson and serializer/deserializer of Protobuf Messages.'
         url = 'https://github.com/kaelzhang/java-fastjson-protobuf'
-        organization {
-          name "${GROUP}"
-          url 'https://github.com/kaelzhang'
-        }
-        issueManagement {
-          system 'GitHub'
-          url 'https://github.com/kaelzhang/java-fastjson-protobuf/issues'
-        }
         licenses {
           license {
             name = 'The Apache License, Version 2.0'
@@ -148,41 +140,6 @@ publishing {
           url = 'https://github.com/kaelzhang/java-fastjson-protobuf'
         }
       }
-
-      // create the signed artifacts
-      project.tasks.signArchives.signatureFiles.each {
-        artifact(it) {
-          def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-          if (matcher.find()) {
-            classifier = matcher.group(1)
-          } else {
-            classifier = null
-          }
-          extension = 'jar.asc'
-        }
-      }
     }
-
-    repositories {
-      maven {
-        url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-        credentials {
-          username sonatypeUsername
-          password sonatypePassword
-        }
-      }
-    }
-  }
-}
-
-model {
-  tasks.generatePomFileForMavenJavaPublication {
-    destination = file("$buildDir/generated-pom.xml")
-  }
-  tasks.publishMavenJavaPublicationToMavenLocal {
-    dependsOn project.tasks.signArchives
-  }
-  tasks.publishMavenJavaPublicationToMavenRepository {
-    dependsOn project.tasks.signArchives
   }
 }
