@@ -7,7 +7,7 @@ before_install:
   - mkdir -p ~/.gradle
 
   # Write fake username and password into gradle.properties, so that gradle would not fail
-  - echo -e "\nsonatypeUsername = foo\nsonatypePassword = bar" >> ~/.gradle/gradle.properties
+  - echo -e "\nsonatypeUsername=foo\nsonatypePassword=bar\nsigning.enabled=false\npublishing.enabled=false" >> ~/.gradle/gradle.properties
   - cat ~/.gradle/gradle.properties
 
 before_script:
