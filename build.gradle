@@ -1,13 +1,20 @@
+def GROUP = 'ai.ost'
+def NAME = 'fastjson-protobuf'
+def VERSION = '0.1.0'
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'com.google.protobuf'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 def PROTOC_VERSION = '3.5.1-1'
 def PROTOBUF_VERSION = '3.5.1'
 def GRPC_VERSION = '1.14.0'
+def FASTJSON_VERSION = '1.2.49'
 
 buildscript {
   repositories {
@@ -35,8 +42,6 @@ protobuf {
   }
 }
 
-group = 'ai.ost'
-
 springBoot {
   mainClassName = 'ai.ost.fastjson_protobuf.TestApplication'
 }
@@ -52,7 +57,7 @@ dependencies {
   compile "com.google.protobuf:protobuf-java-util:${PROTOBUF_VERSION}"
   compile "org.apache.directory.studio:org.apache.commons.io:2.4"
   compile 'org.springframework:spring-webmvc:5.0.8.RELEASE'
-  compile "com.alibaba:fastjson:1.2.49"
+  compile "com.alibaba:fastjson:${FASTJSON_VERSION}"
 
   // tests
   testCompile "org.springframework.boot:spring-boot-starter-web"
@@ -83,4 +88,101 @@ jacocoTestReport {
 
   classDirectories = files([debugTree])
   sourceDirectories = files([mainSrc])
+}
+
+task sourceJar(type: Jar) {
+  classifier "sources"
+  from sourceSets.main.allJava
+}
+
+artifacts {
+  archives jar
+  archives sourceJar
+}
+
+signing {
+  sign configurations.archives
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId = "${GROUP}"
+      artifactId = "${NAME}"
+      version = "${VERSION}"
+
+      from components.java
+
+      artifact(sourceJar) {
+        classifier = 'sources'
+      }
+
+      pom {
+        name = 'FastJson Protobuf'
+        description = 'Spring `HttpMessageConverter` implementation with Alibaba FastJson and serializer/deserializer of Protobuf Messages.'
+        url = 'https://github.com/kaelzhang/java-fastjson-protobuf'
+        organization {
+          name "${GROUP}"
+          url 'https://github.com/kaelzhang'
+        }
+        issueManagement {
+          system 'GitHub'
+          url 'https://github.com/kaelzhang/java-fastjson-protobuf/issues'
+        }
+        licenses {
+          license {
+            name = 'The Apache License, Version 2.0'
+            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+        developers {
+          developer {
+            id = 'kaelzhang'
+            name = 'Kael Zhang'
+            email = 'i+maven-central@kael.me'
+          }
+        }
+        scm {
+          connection = 'scm:git:git://github.com.com/kaelzhang/java-fastjson-protobuf.git'
+          developerConnection = 'scm:git:ssh://github.com.com/kaelzhang/java-fastjson-protobuf.git'
+          url = 'https://github.com/kaelzhang/java-fastjson-protobuf'
+        }
+      }
+
+      // create the signed artifacts
+      project.tasks.signArchives.signatureFiles.each {
+        artifact(it) {
+          def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+          if (matcher.find()) {
+            classifier = matcher.group(1)
+          } else {
+            classifier = null
+          }
+          extension = 'jar.asc'
+        }
+      }
+    }
+
+    repositories {
+      maven {
+        url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+        credentials {
+          username sonatypeUsername
+          password sonatypePassword
+        }
+      }
+    }
+  }
+}
+
+model {
+  tasks.generatePomFileForMavenJavaPublication {
+    destination = file("$buildDir/generated-pom.xml")
+  }
+  tasks.publishMavenJavaPublicationToMavenLocal {
+    dependsOn project.tasks.signArchives
+  }
+  tasks.publishMavenJavaPublicationToMavenRepository {
+    dependsOn project.tasks.signArchives
+  }
 }

@@ -69,7 +69,7 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
     try {
       is = inputMessage.getBody();
     } catch (IOException e) {
-      throw new HttpMessageNotReadableException("I/O error while getting input body", e);
+      throw new IOException("I/O error while getting input body", e);
     }
 
     FastJsonConfig config = this.getFastJsonConfig();
@@ -78,7 +78,7 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
     try {
       IOUtils.copy(is, writer, config.getCharset());
     } catch (IOException e) {
-      throw new HttpMessageNotReadableException("I/O error while reading input message", e);
+      throw new IOException("I/O error while reading input message", e);
     }
 
     try {
