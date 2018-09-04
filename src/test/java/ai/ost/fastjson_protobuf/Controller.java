@@ -46,6 +46,25 @@ public class Controller {
     res.setMessage("hello " + req.getName());
     return res;
   }
+
+  @RequestMapping(
+    value = "/mixed-res",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  public MixedRes mixedRes (@RequestBody NormalReq req) {
+    MixedRes res = new MixedRes();
+    String message = req.getName();
+
+    res.setRes(
+      RequestBodyRes.newBuilder()
+      .setMessage(message)
+      .build()
+    );
+
+    return res;
+  }
 }
 
 class NormalReq {
@@ -69,5 +88,29 @@ class NormalRes {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+}
+
+class MixedReq {
+  private RequestBodyReq req;
+
+  public RequestBodyReq getReq() {
+    return req;
+  }
+
+  public void setReq(RequestBodyReq req) {
+    this.req = req;
+  }
+}
+
+class MixedRes {
+  private RequestBodyRes res;
+
+  public void setRes(RequestBodyRes res) {
+    this.res = res;
+  }
+
+  public RequestBodyRes getRes() {
+    return res;
   }
 }

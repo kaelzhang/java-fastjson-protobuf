@@ -5,7 +5,6 @@ import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
@@ -67,51 +66,51 @@ class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter 
   }
 
   // JSON -> Given Entity
-  @Override
-  protected Object readInternal(
-    Class<?> clazz,
-    HttpInputMessage inputMessage
-  ) throws IOException, HttpMessageNotReadableException {
-    if (!protobufReadEnabled || isNotGeneratedMessageV3(clazz)) {
-      return super.readInternal(clazz, inputMessage);
-    }
-
-    InputStream is;
-
-    try {
-      is = inputMessage.getBody();
-    } catch (IOException e) {
-      throw new IOException("can not get message body");
-    }
-
-    StringWriter writer = new StringWriter();
-
-    try {
-      IOUtils.copy(is, writer, "utf8");
-    } catch (IOException e) {
-      throw new IOException("can not read input stream");
-    }
-
-    Message.Builder builder;
-
-    try {
-      builder = (GeneratedMessageV3.Builder) clazz.getMethod("newBuilder").invoke(clazz);
-    } catch (NoSuchMethodException e) {
-      throw new HttpMessageNotReadableException("invalid instance");
-    } catch (IllegalArgumentException e) {
-      throw new HttpMessageNotReadableException("invalid arguments");
-    } catch (InvocationTargetException e) {
-      throw new HttpMessageNotReadableException("invalid target");
-    } catch (IllegalAccessException e) {
-      throw new HttpMessageNotReadableException("invalid access");
-    }
-
-    try {
-      parser.merge(writer.toString(), builder);
-    } catch (InvalidProtocolBufferException e) {
-      throw new HttpMessageNotReadableException("can not convert to protobuf");
-    }
-
-    return builder.build();
-  }
+//  @Override
+//  protected Object readInternal(
+//    Class<?> clazz,
+//    HttpInputMessage inputMessage
+//  ) throws IOException, HttpMessageNotReadableException {
+//    if (!protobufReadEnabled || isNotGeneratedMessageV3(clazz)) {
+//      return super.readInternal(clazz, inputMessage);
+//    }
+//
+//    InputStream is;
+//
+//    try {
+//      is = inputMessage.getBody();
+//    } catch (IOException e) {
+//      throw new IOException("can not get message body");
+//    }
+//
+//    StringWriter writer = new StringWriter();
+//
+//    try {
+//      IOUtils.copy(is, writer, "utf8");
+//    } catch (IOException e) {
+//      throw new IOException("can not read input stream");
+//    }
+//
+//    Message.Builder builder;
+//
+//    try {
+//      builder = (GeneratedMessageV3.Builder) clazz.getMethod("newBuilder").invoke(clazz);
+//    } catch (NoSuchMethodException e) {
+//      throw new HttpMessageNotReadableException("invalid instance");
+//    } catch (IllegalArgumentException e) {
+//      throw new HttpMessageNotReadableException("invalid arguments");
+//    } catch (InvocationTargetException e) {
+//      throw new HttpMessageNotReadableException("invalid target");
+//    } catch (IllegalAccessException e) {
+//      throw new HttpMessageNotReadableException("invalid access");
+//    }
+//
+//    try {
+//      parser.merge(writer.toString(), builder);
+//    } catch (InvalidProtocolBufferException e) {
+//      throw new HttpMessageNotReadableException("can not convert to protobuf");
+//    }
+//
+//    return builder.build();
+//  }
 }
