@@ -4,8 +4,6 @@ import ai.ost.test_vo.Entity.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-
 @RestController
 public class Controller {
 
