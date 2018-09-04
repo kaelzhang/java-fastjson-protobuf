@@ -14,7 +14,7 @@ before_script:
   - chmod +x gradlew
 
 install:
-  - ./gradlew assemble -x signArchives -x signing -x publishing
+  - ./gradlew assemble -x signArchives
 
 script:
   - ./gradlew check
