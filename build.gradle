@@ -2,19 +2,26 @@ def GROUP = 'ai.ost'
 def NAME = 'fastjson-protobuf'
 def VERSION = '0.1.1'
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'com.google.protobuf'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
+[
+  'java',
+  'idea',
+  'com.google.protobuf',
+  'org.springframework.boot',
+  'io.spring.dependency-management',
+  'jacoco',
+  'maven-publish',
+  'signing'
+].each {
+  apply plugin: it
+}
 
 def PROTOC_VERSION = '3.5.1-1'
 def PROTOBUF_VERSION = '3.5.1'
 def GRPC_VERSION = '1.14.0'
 def FASTJSON_VERSION = '1.2.49'
+
+group = "${GROUP}"
+version = "${VERSION}"
 
 buildscript {
   repositories {
@@ -90,12 +97,14 @@ jacocoTestReport {
   sourceDirectories = files([mainSrc])
 }
 
-task sourceJar(type: Jar) {
+task coreJar (type: Jar) {
+  classifier = null
   from sourceSets.main.allJava
 }
 
-signing {
-  sign configurations.archives
+task sourcesJar(type: Jar, dependsOn: [coreJar]) {
+  classifier = 'sources'
+  from sourceSets.main.allJava
 }
 
 publishing {
@@ -116,6 +125,10 @@ publishing {
       version = "${VERSION}"
 
       from components.java
+
+      artifact (sourcesJar) {
+        classifier = 'sources'
+      }
 
       pom {
         name = 'FastJson Protobuf'
@@ -140,6 +153,12 @@ publishing {
           url = 'https://github.com/kaelzhang/java-fastjson-protobuf'
         }
       }
+
+
     }
   }
+}
+
+signing {
+  sign publishing.publications.maven
 }
