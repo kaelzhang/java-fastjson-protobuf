@@ -14,8 +14,7 @@ before_script:
   - chmod +x gradlew
 
 install:
-  # Exclude signArchives for travis-ci
-  - ./gradlew assemble -x signArchives
+  - ./gradlew assemble
 
 script:
   - ./gradlew check
