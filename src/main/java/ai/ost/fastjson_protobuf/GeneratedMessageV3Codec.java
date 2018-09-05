@@ -48,11 +48,6 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
     serializer.out.write(json);
   }
 
-  private Message empty (Message.Builder builder, JSONLexerBase lexer) {
-    lexer.nextToken();
-    return builder.build();
-  }
-
   @Override
   public <T> T deserialze(
     DefaultJSONParser jsonParser,
@@ -78,10 +73,6 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
 
     int pos = lexer.pos();
     int startToken = lexer.token();
-    if (startToken == JSONToken.NULL) {
-      return (T) empty(builder, lexer);
-    }
-
     int endToken;
 
     if (startToken == JSONToken.LBRACE) {
@@ -89,7 +80,12 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
     } else if (startToken == JSONToken.LBRACKET) {
       endToken = JSONToken.RBRACKET;
     } else {
-      throw new JSONException("Expect '{' or '[', but got '" + lexer.getCurrent() + "'");
+      String str = subString(lexer, startToken);
+      throw new JSONException(
+        str.isEmpty()
+          ? "Expect message object"
+          : "Expect message object but got: " + str
+      );
     }
 
     lexer.nextToken();
@@ -127,6 +123,22 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
     }
 
     return (T) builder.build();
+  }
+
+  // Get the subString of the current token
+  private String subString (JSONLexerBase lexer, int token) {
+    switch (token) {
+      case JSONToken.TRUE           : return "true";
+      case JSONToken.FALSE          : return "false";
+      case JSONToken.LITERAL_STRING : return "\"" + lexer.stringVal() + "\"";
+
+      // We can't even get the substring of the current token,
+      //   due to the limilation of fastjson
+      case JSONToken.LITERAL_FLOAT  : return "a float number";
+      case JSONToken.LITERAL_INT    : return "an integer";
+    }
+
+    return "";
   }
 
   @Override

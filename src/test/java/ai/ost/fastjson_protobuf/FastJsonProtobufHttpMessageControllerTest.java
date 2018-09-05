@@ -102,6 +102,19 @@ public class FastJsonProtobufHttpMessageControllerTest {
   }
 
   @Test
+  public void mixedReqUnexpectedJson() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/mixed-req")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"req\":\"wrong\"".getBytes())
+    )
+      .andExpect(status().isBadRequest());
+      // .andExpect(content().string(equalTo("{\"message\":\"hello world\"}")));
+  }
+
+  @Test
   public void mixed() throws Exception {
     mvc.perform(
       MockMvcRequestBuilders
@@ -125,5 +138,17 @@ public class FastJsonProtobufHttpMessageControllerTest {
     )
       .andExpect(status().isOk())
       .andExpect(content().string(equalTo("{\"res\":{\"message\":\"hello world\"}}")));
+  }
+
+  @Test
+  public void deepWithWrongRequestJson() throws Exception {
+    mvc.perform(
+      MockMvcRequestBuilders
+        .post("/deep")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON)
+        .content("{\"req\":{\"name\":\"world".getBytes())
+    )
+      .andExpect(status().isBadRequest());
   }
 }

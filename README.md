@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/kaelzhang/java-fastjson-protobuf.svg?branch=master)](https://travis-ci.org/kaelzhang/java-fastjson-protobuf)
 [![Coverage](https://codecov.io/gh/kaelzhang/java-fastjson-protobuf/branch/master/graph/badge.svg)](https://codecov.io/gh/kaelzhang/java-fastjson-protobuf)
+[![Maven Version](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/ai/ost/fastjson-protobuf/maven-metadata.xml.svg)](https://github.com/kaelzhang/java-fastjson-protobuf)
 <!-- optional appveyor tst
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/kaelzhang/java-fastjson-protobuf?branch=master&svg=true)](https://ci.appveyor.com/project/kaelzhang/java-fastjson-protobuf)
 -->

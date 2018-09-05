@@ -1,6 +1,6 @@
 def GROUP = 'ai.ost'
 def NAME = 'fastjson-protobuf'
-def VERSION = '0.1.1'
+def VERSION = '0.1.2'
 
 [
   'java',
