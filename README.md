@@ -25,7 +25,9 @@ With `fastjson-protobuf`, we can use protocol buffers to define both request and
 ### Gradle
 
 ```gradle
-compile "ai.ost:fastjson-protobuf:${VERSION}"
+dependencies {
+  compile "ai.ost:fastjson-protobuf:${VERSION}"
+}
 ```
 
 ### Maven
