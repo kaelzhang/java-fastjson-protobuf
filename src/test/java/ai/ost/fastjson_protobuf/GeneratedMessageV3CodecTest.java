@@ -1,20 +1,15 @@
 package ai.ost.fastjson_protobuf;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
-import ai.ost.test_vo.Entity.*;
 
-import java.io.IOException;
+import ai.ost.test_vo.Entity.*;
 
 public class GeneratedMessageV3CodecTest {
   private ParserConfig parserConfig = new ParserConfig();
-  private SerializeConfig serializeConfig = new SerializeConfig();
 
   @Test
   public void jsonUnexpectedEOF () {

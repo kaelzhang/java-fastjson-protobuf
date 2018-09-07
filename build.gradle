@@ -28,6 +28,14 @@ buildscript {
   }
 }
 
+allprojects {
+  gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+  }
+}
+
 def PROTOC_VERSION = '3.5.1-1'
 def PROTOBUF_VERSION = '3.5.1'
 def GRPC_VERSION = '1.14.0'
@@ -102,6 +110,11 @@ task sourcesJar(type: Jar) {
   classifier = 'sources'
 }
 
+task javadocJar(type: Jar) {
+  from javadoc
+  classifier = 'javadoc'
+}
+
 publishing {
   publications {
     maven(MavenPublication) {
@@ -111,6 +124,10 @@ publishing {
 
       artifact (sourcesJar) {
         classifier = 'sources'
+      }
+
+      artifact (javadocJar) {
+        classifier = 'javadoc'
       }
 
       pom {
@@ -151,6 +168,8 @@ publishing {
 }
 
 jar {
+  // It is weird that the task:jar is skipped by default, so enable it manually
+  enabled = true
   doFirst {
     tasks['generatePomFileForMavenPublication'].execute()
   }

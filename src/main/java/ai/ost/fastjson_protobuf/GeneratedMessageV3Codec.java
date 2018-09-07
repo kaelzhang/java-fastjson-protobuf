@@ -48,6 +48,7 @@ class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
     serializer.out.write(json);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T deserialze(
     DefaultJSONParser jsonParser,
