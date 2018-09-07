@@ -2,18 +2,11 @@ def GROUP = 'ai.ost'
 def NAME = 'fastjson-protobuf'
 def VERSION = '0.1.3'
 
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
-    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.5"
-  }
-}
+group = "${GROUP}"
+version = "${VERSION}"
 
 [
-  'java-library',
+  'java',
   'idea',
   'com.google.protobuf',
   'org.springframework.boot',
@@ -25,13 +18,20 @@ buildscript {
   apply plugin: it
 }
 
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
+    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.5"
+  }
+}
+
 def PROTOC_VERSION = '3.5.1-1'
 def PROTOBUF_VERSION = '3.5.1'
 def GRPC_VERSION = '1.14.0'
 def FASTJSON_VERSION = '1.2.49'
-
-group = "${GROUP}"
-version = "${VERSION}"
 
 protobuf {
   protoc {
