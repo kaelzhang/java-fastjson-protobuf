@@ -15,7 +15,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Type;
 
 
-class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter {
+public class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageConverter {
   private JsonFormat.Printer printer = JsonFormat
     .printer()
     .omittingInsignificantWhitespace()

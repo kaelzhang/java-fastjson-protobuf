@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
-class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
+public class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserializer {
   final static GeneratedMessageV3Codec instance = new GeneratedMessageV3Codec();
 
   private static JsonFormat.Printer printer = JsonFormat

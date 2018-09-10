@@ -170,6 +170,7 @@ publishing {
 jar {
   // It is weird that the task:jar is skipped by default, so enable it manually
   enabled = true
+
   doFirst {
     tasks['generatePomFileForMavenPublication'].execute()
   }
