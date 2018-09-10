@@ -41,8 +41,8 @@ public class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserial
 
     try {
       json = printer.print(o);
-    } catch (InvalidProtocolBufferException e) {
-      throw new IOException("invalid protobuf");
+    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+      throw new InvalidProtocolBufferException(e);
     }
 
     serializer.out.write(json);

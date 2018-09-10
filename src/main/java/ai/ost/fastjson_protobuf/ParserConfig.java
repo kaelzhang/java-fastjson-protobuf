@@ -10,7 +10,7 @@ import java.util.Map;
 public class ParserConfig extends com.alibaba.fastjson.parser.ParserConfig {
   private final HashMap<Class<?>, ObjectDeserializer> genericDeserializer;
 
-  ParserConfig () {
+  public ParserConfig () {
     super();
     genericDeserializer = new HashMap<>();
     genericPut(GeneratedMessageV3.class, GeneratedMessageV3Codec.instance);

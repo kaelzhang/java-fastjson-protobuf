@@ -1,5 +1,6 @@
-package ai.ost.fastjson_protobuf;
+package ai.ost.fastjson_protobuf_test;
 
+import ai.ost.fastjson_protobuf.ParserConfig;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import org.hamcrest.CoreMatchers;
@@ -17,6 +18,18 @@ public class GeneratedMessageV3CodecTest {
       JSON.parseObject("{\"req\":{\"name\":\"world", DeepReq.class, parserConfig, JSON.DEFAULT_PARSER_FEATURE);
     } catch (JSONException e) {
       Assert.assertThat(e.getMessage(), CoreMatchers.containsString("unclosed string"));
+      return;
+    }
+
+    Assert.fail("should fail");
+  }
+
+  @Test
+  public void jsonUnexpectedPropertyInt () {
+    try {
+      JSON.parseObject("{\"code\":\"ok\"}", SimpleProtoRes.class, parserConfig, JSON.DEFAULT_PARSER_FEATURE);
+    } catch (JSONException e) {
+      Assert.assertThat(e.getMessage(), CoreMatchers.containsString("Not an int32 value"));
       return;
     }
 

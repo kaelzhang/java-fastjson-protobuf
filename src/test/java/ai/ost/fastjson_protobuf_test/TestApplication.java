@@ -1,4 +1,4 @@
-package ai.ost.fastjson_protobuf;
+package ai.ost.fastjson_protobuf_test;
 
 import java.util.Arrays;
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public class SerializeConfig extends com.alibaba.fastjson.serializer.SerializeConfig {
   private final HashMap<Class<?>, ObjectSerializer> genericSerializer;
 
-  SerializeConfig () {
+  public SerializeConfig () {
     super();
     genericSerializer = new HashMap<>();
     genericPut(GeneratedMessageV3.class, GeneratedMessageV3Codec.instance);
