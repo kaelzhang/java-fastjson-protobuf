@@ -9,7 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,12 +20,17 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@WebAppConfiguration("src/test/java/ai/ost/fastjson_protobuf")
-@ContextConfiguration(classes = TestApplication.class)
-public class HttpMessageControllerTest {
+@SpringBootApplication
+class TestApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(TestApplication.class, args);
+  }
+}
 
+@RunWith(SpringRunner.class)
+@WebAppConfiguration("src/test/java/ai/ost/fastjson_protobuf_test")
+@ContextConfiguration(classes = TestApplication.class)
+public class FastJsonProtobufControllerTest {
   @Autowired
   private WebApplicationContext webAppContext;
   private MockMvc mvc;

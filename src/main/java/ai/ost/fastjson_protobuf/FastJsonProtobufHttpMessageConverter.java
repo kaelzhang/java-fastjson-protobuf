@@ -30,19 +30,15 @@ public class FastJsonProtobufHttpMessageConverter extends FastJsonHttpMessageCon
   }
 
   private void disableProtobufWriter (com.alibaba.fastjson.serializer.SerializeConfig serializeConfig) {
-    // do nothing
-  }
-
-  protected void disableProtobufWriter (SerializeConfig serializeConfig) {
-    serializeConfig.disableProtobuf();
+    if (SerializeConfig.class.isAssignableFrom(serializeConfig.getClass())) {
+      ((SerializeConfig) serializeConfig).disableProtobuf();
+    }
   }
 
   private void disableProtobufParser (com.alibaba.fastjson.parser.ParserConfig parserConfig) {
-    // do nothing
-  }
-
-  protected void disableProtobufParser (ParserConfig parserConfig) {
-    parserConfig.disableProtobuf();
+    if (ParserConfig.class.isAssignableFrom(parserConfig.getClass())) {
+      ((ParserConfig) parserConfig).disableProtobuf();
+    }
   }
 
   @Override

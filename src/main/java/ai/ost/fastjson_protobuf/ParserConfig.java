@@ -22,7 +22,9 @@ public class ParserConfig extends com.alibaba.fastjson.parser.ParserConfig {
     if (serializer == null) {
       for (Map.Entry<Class<?>, ObjectDeserializer> entry: genericDeserializer.entrySet()) {
         if (entry.getKey().isAssignableFrom(clazz)) {
-          return entry.getValue();
+          ObjectDeserializer deserializer = entry.getValue();
+          // genericDeserializer.put(clazz, deserializer);
+          return deserializer;
         }
       }
     }

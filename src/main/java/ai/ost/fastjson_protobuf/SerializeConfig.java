@@ -23,7 +23,9 @@ public class SerializeConfig extends com.alibaba.fastjson.serializer.SerializeCo
     if (writer == null) {
       for (Map.Entry<Class<?>, ObjectSerializer> entry: genericSerializer.entrySet()) {
         if (entry.getKey().isAssignableFrom(clazz)) {
-          return entry.getValue();
+          ObjectSerializer serializer = entry.getValue();
+          // genericSerializer.put(clazz, serializer);
+          return serializer;
         }
       }
     }

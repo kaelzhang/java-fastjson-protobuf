@@ -57,10 +57,6 @@ protobuf {
   }
 }
 
-springBoot {
-  mainClassName = 'ai.ost.fastjson_protobuf.TestApplication'
-}
-
 repositories {
   mavenCentral()
 }

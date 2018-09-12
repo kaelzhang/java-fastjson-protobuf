@@ -1,17 +1,14 @@
 package ai.ost.fastjson_protobuf_test;
 
+import ai.ost.fastjson_protobuf_test_common.BaseController;
+import ai.ost.fastjson_protobuf_test_common.NormalReq;
+import ai.ost.fastjson_protobuf_test_common.NormalRes;
 import ai.ost.test_vo.Entity.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class Controller {
-
-  @RequestMapping("/simple")
-  public String simple() {
-    return "simple";
-  }
-
+public class FastJsonProtobufController extends BaseController {
   @RequestMapping("/simple-proto")
   public SimpleProtoRes simpleProto () {
     return SimpleProtoRes.newBuilder()
@@ -29,18 +26,6 @@ public class Controller {
     return RequestBodyRes.newBuilder()
       .setMessage("hello " + req.getName())
       .build();
-  }
-
-  @RequestMapping(
-    value = "/normal-json",
-    method = RequestMethod.POST,
-    consumes = MediaType.APPLICATION_JSON_VALUE
-  )
-  @ResponseBody
-  public NormalRes normalJson (@RequestBody NormalReq req) {
-    NormalRes res = new NormalRes();
-    res.setMessage("hello " + req.getName());
-    return res;
   }
 
   @RequestMapping(
@@ -105,30 +90,6 @@ public class Controller {
         )
       )
       .build();
-  }
-}
-
-class NormalReq {
-  private String name;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-}
-
-class NormalRes {
-  private String message;
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
   }
 }
 

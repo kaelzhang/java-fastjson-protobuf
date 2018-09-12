@@ -1,6 +1,9 @@
-package ai.ost.fastjson_protobuf_test;
+package ai.ost.protobuf_disabled_converter_test;
 
 import ai.ost.fastjson_protobuf.FastJsonProtobufHttpMessageConverter;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,9 +20,10 @@ class WebMvcConfig implements WebMvcConfigurer {
   public void configureMessageConverters(
     List<HttpMessageConverter<?>> converters
   ) {
-
     FastJsonProtobufHttpMessageConverter converter =
       new FastJsonProtobufHttpMessageConverter();
+
+    converter.disableProtobuf();
 
     converter.setSupportedMediaTypes(
       Arrays.asList(

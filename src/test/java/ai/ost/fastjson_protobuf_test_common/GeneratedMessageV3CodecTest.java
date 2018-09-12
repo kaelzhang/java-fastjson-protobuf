@@ -1,4 +1,4 @@
-package ai.ost.fastjson_protobuf_test;
+package ai.ost.fastjson_protobuf_test_common;
 
 import ai.ost.fastjson_protobuf.ParserConfig;
 import com.alibaba.fastjson.JSON;
