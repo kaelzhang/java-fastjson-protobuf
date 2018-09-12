@@ -23,7 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @WebAppConfiguration("src/test/java/ai/ost/fastjson_protobuf")
 @ContextConfiguration(classes = TestApplication.class)
-public class FastJsonProtobufHttpMessageControllerTest {
+public class HttpMessageControllerTest {
 
   @Autowired
   private WebApplicationContext webAppContext;

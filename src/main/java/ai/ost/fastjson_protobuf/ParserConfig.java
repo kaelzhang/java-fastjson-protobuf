@@ -53,9 +53,9 @@ public class ParserConfig extends com.alibaba.fastjson.parser.ParserConfig {
     return super.getDeserializer(clazz, type);
   }
 
-//  void disableProtobuf () {
-//    genericDeserializer.clear();
-//  }
+ void disableProtobuf () {
+   genericDeserializer.clear();
+ }
 
   void genericPut (Type type, ObjectDeserializer serializer) {
     genericDeserializer.put((Class<?>) type, serializer);

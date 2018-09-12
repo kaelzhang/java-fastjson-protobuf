@@ -72,7 +72,6 @@ public class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserial
 
     JSONLexerBase lexer = (JSONLexerBase) jsonParser.getLexer();
 
-    int pos = lexer.pos();
     int startToken = lexer.token();
     int endToken;
 
@@ -144,6 +143,6 @@ public class GeneratedMessageV3Codec implements ObjectSerializer, ObjectDeserial
 
   @Override
   public int getFastMatchToken() {
-    return 0;
+    return JSONToken.LBRACE;
   }
 }
