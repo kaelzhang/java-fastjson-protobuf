@@ -17,19 +17,19 @@ public class ParserConfig extends com.alibaba.fastjson.parser.ParserConfig {
   }
 
   private ObjectDeserializer getGenericDeserializer (Class<?> clazz) {
-    ObjectDeserializer serializer = genericDeserializer.get(clazz);
+    ObjectDeserializer parser = genericDeserializer.get(clazz);
 
-    if (serializer == null) {
+    if (parser == null) {
       for (Map.Entry<Class<?>, ObjectDeserializer> entry: genericDeserializer.entrySet()) {
         if (entry.getKey().isAssignableFrom(clazz)) {
           ObjectDeserializer deserializer = entry.getValue();
-          // genericDeserializer.put(clazz, deserializer);
+          genericDeserializer.put(clazz, deserializer);
           return deserializer;
         }
       }
     }
 
-    return serializer;
+    return parser;
   }
 
   @Override
@@ -55,11 +55,11 @@ public class ParserConfig extends com.alibaba.fastjson.parser.ParserConfig {
     return super.getDeserializer(clazz, type);
   }
 
- void disableProtobuf () {
-   genericDeserializer.clear();
- }
+  void disableProtobuf () {
+    genericDeserializer.clear();
+  }
 
-  void genericPut (Type type, ObjectDeserializer serializer) {
+  public void genericPut (Type type, ObjectDeserializer serializer) {
     genericDeserializer.put((Class<?>) type, serializer);
   }
 }

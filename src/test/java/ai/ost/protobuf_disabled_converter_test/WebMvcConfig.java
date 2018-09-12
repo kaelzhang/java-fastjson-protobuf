@@ -20,6 +20,17 @@ class WebMvcConfig implements WebMvcConfigurer {
   public void configureMessageConverters(
     List<HttpMessageConverter<?>> converters
   ) {
+    // Disable with non-fastjson-protobuf configs
+    FastJsonProtobufHttpMessageConverter converterUnused =
+      new FastJsonProtobufHttpMessageConverter();
+
+    FastJsonConfig config = converterUnused.getFastJsonConfig();
+    config.setParserConfig(new ParserConfig());
+    config.setSerializeConfig(new SerializeConfig());
+
+    converterUnused.disableProtobuf();
+
+    // Disable on fastjson-protobuf config
     FastJsonProtobufHttpMessageConverter converter =
       new FastJsonProtobufHttpMessageConverter();
 

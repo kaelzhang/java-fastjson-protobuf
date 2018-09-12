@@ -16,28 +16,38 @@ public class SerializeConfig extends com.alibaba.fastjson.serializer.SerializeCo
     genericPut(GeneratedMessageV3.class, GeneratedMessageV3Codec.instance);
   }
 
-  @Override
-  public ObjectSerializer getObjectWriter(Class<?> clazz) {
+  private ObjectSerializer getGenericObjectWriter (Class<?> clazz) {
     ObjectSerializer writer = genericSerializer.get(clazz);
 
     if (writer == null) {
       for (Map.Entry<Class<?>, ObjectSerializer> entry: genericSerializer.entrySet()) {
         if (entry.getKey().isAssignableFrom(clazz)) {
           ObjectSerializer serializer = entry.getValue();
-          // genericSerializer.put(clazz, serializer);
+          genericSerializer.put(clazz, serializer);
           return serializer;
         }
       }
     }
 
+    return writer;
+  }
+
+  @Override
+  public ObjectSerializer getObjectWriter (Class<?> clazz) {
+    ObjectSerializer writer = getGenericObjectWriter(clazz);
+
+    if (writer != null) {
+      return writer;
+    }
+
     return super.getObjectWriter(clazz);
   }
 
- void disableProtobuf () {
-   genericSerializer.clear();
- }
+  void disableProtobuf () {
+    genericSerializer.clear();
+  }
 
-  void genericPut (Type type, ObjectSerializer serializer) {
+  public void genericPut (Type type, ObjectSerializer serializer) {
     genericSerializer.put((Class<?>) type, serializer);
   }
 }
