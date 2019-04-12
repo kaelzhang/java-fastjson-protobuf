@@ -20,6 +20,8 @@ Spring `HttpMessageConverter` implementation with Alibaba FastJson and serialize
 
 With `fastjson-protobuf`, we can use protocol buffers to define both request and response entities.
 
+Only **proto3** is supported for now.
+
 ## Install
 
 ### Gradle
@@ -52,10 +54,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
   public void configureMessageConverters(
     List<HttpMessageConverter<?>> converters
   ) {
-    
-    FastJsonProtobufHttpMessageConverter converter = 
+
+    FastJsonProtobufHttpMessageConverter converter =
       new FastJsonProtobufHttpMessageConverter();
-    
+
     converter.setSupportedMediaTypes(
       Arrays.asList(
         MediaType.APPLICATION_JSON,
